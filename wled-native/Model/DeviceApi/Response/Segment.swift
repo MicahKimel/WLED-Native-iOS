@@ -1,7 +1,7 @@
 
 import Foundation
 
-struct Segment: Decodable {
+struct Segment: Decodable, Encodable {
     var id : Int64?
     var start : Int64?
     var stop : Int64?

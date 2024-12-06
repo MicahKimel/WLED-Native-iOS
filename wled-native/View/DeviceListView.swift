@@ -236,6 +236,18 @@ struct DeviceListView: View {
         }
     }
     
+    private func updateAudioDevices() async {
+        await withTaskGroup(of: Void.self) { group in
+            devices.filter({ $0.captureMusic == true }).forEach { device in
+                let postParam = WLEDStateChange(segment: [Segment(effectSpeed: Int64(myAudio.audioIntensity * 255), effectInt64ensity: Int64(myAudio.audioIntensity * 255))])
+                print("Device Music Connect \(device.address ?? "?") toggled \(postParam)")
+                Task {
+                    await device.requestManager.addRequest(WLEDChangeStateRequest(state: postParam, context: viewContext))
+                }
+            }
+        }
+    }
+    
     private func refreshDevice(device: Device, group: inout TaskGroup<Void>) {
         // Don't start a refresh request when the device is not done refreshing.
         if (!device.isRefreshing) {

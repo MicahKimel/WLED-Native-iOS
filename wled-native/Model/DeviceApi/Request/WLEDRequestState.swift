@@ -10,7 +10,7 @@ struct WLEDStateChange: Decodable, Encodable {
     // var nightlight: Nightlight?
     var liveDataOverride: Int64?
     var mainSegment: Int64?
-    // var segment: [Segment]?
+    var segment: [Segment]?
     // "v" will make the post request return the current state of the device
     // So we can also update the UI while setting values
     var verbose : Bool = true
@@ -25,7 +25,7 @@ struct WLEDStateChange: Decodable, Encodable {
         // case nightlight = "nl"
         case liveDataOverride = "lor"
         case mainSegment = "mainseg"
-        // case segment = "seg"
+        case segment = "seg"
         case verbose = "v"
     }
 }

@@ -80,6 +80,14 @@ struct DeviceListItemView: View {
                     }
                 )
                 .tint(colorFromHex(rgbValue: Int(device.color)))
+                HStack{
+                    Toggle("Music Connect On/Off", isOn: Binding(get: {device.captureMusic}, set: {
+                        device.captureMusic = $0
+                    }))
+                    .labelsHidden()
+                    .frame(alignment: .trailing)
+                    .tint(colorFromHex(rgbValue: Int(device.color)))
+                }
             }
             
             Toggle("Turn On/Off", isOn: Binding(get: {device.isPoweredOn}, set: {
