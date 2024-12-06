@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		666450BC2D03842600ED89F1 /* AuidoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666450BB2D03842600ED89F1 /* AuidoCapture.swift */; };
 		C90656202BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C906561F2BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy */; };
 		C93470AC29D904C20085D9D5 /* errorPage.en.html in Resources */ = {isa = PBXBuildFile; fileRef = C93470AB29D904C20085D9D5 /* errorPage.en.html */; };
 		C93470AE29D905BD0085D9D5 /* 012_rip.png in Resources */ = {isa = PBXBuildFile; fileRef = C93470AD29D905BD0085D9D5 /* 012_rip.png */; };
@@ -69,6 +70,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		666450BB2D03842600ED89F1 /* AuidoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuidoCapture.swift; sourceTree = "<group>"; };
 		C906561F2BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C93470AB29D904C20085D9D5 /* errorPage.en.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = errorPage.en.html; sourceTree = "<group>"; };
 		C93470AD29D905BD0085D9D5 /* 012_rip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 012_rip.png; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				C9767DE22AFAE65C002F3EA9 /* FetchedObjects.swift */,
 				C95B4A822B3E3F540081F4C5 /* BackgroundBlurView.swift */,
 				C99BAC2D2B735875009BC476 /* ToolbarBadge.swift */,
+				666450BB2D03842600ED89F1 /* AuidoCapture.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				C9767DE02AFA04E0002F3EA9 /* DeviceEditView.swift in Sources */,
 				C9767DE32AFAE65C002F3EA9 /* FetchedObjects.swift in Sources */,
 				C97CD4A92B30165900420E93 /* WLEDRepoApi.swift in Sources */,
+				666450BC2D03842600ED89F1 /* AuidoCapture.swift in Sources */,
 				C946FB902B6C92C400D5B00D /* WLEDRefreshRequest.swift in Sources */,
 				C95B4A832B3E3F540081F4C5 /* BackgroundBlurView.swift in Sources */,
 				C97CD49D2B269F3000420E93 /* GithubAsset.swift in Sources */,

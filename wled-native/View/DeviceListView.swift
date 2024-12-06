@@ -36,6 +36,10 @@ struct DeviceListView: View {
     
     @State private var addDeviceButtonActive: Bool = false
     
+    @State private var startAudioCaptureButtonActive: Bool = false
+    
+    @StateObject private var myAudio = AudioIntensityManager()
+    
     @SceneStorage("DeviceListView.showHiddenDevices") private var showHiddenDevices: Bool = false
     @SceneStorage("DeviceListView.showOfflineDevices") private var showOfflineDevices: Bool = true
     
@@ -119,6 +123,9 @@ struct DeviceListView: View {
                     addButton
                 }
                 Section {
+                    captureAudioButton
+                }
+                Section {
                     visibilityButton
                     hideOfflineButton
                 }
@@ -136,6 +143,19 @@ struct DeviceListView: View {
     var addButton: some View {
         Button {
             addDeviceButtonActive.toggle()
+        } label: {
+            Label("Add New Device", systemImage: "plus")
+        }
+    }
+    
+    var captureAudioButton: some View {
+        Button {
+            if startAudioCaptureButtonActive {
+                myAudio.stopMeasuring()
+            } else {
+                myAudio.startMeasuring()
+            }
+            startAudioCaptureButtonActive.toggle()
         } label: {
             Label("Add New Device", systemImage: "plus")
         }
