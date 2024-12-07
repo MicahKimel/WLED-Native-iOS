@@ -154,10 +154,17 @@ struct DeviceListView: View {
                 myAudio.stopMeasuring()
             } else {
                 myAudio.startMeasuring()
+                timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                    if startAudioCaptureButtonActive {
+                        Task{
+                            await updateAudioDevices()
+                        }
+                    }
+                }
             }
             startAudioCaptureButtonActive.toggle()
         } label: {
-            Label("Add New Device", systemImage: "plus")
+            Label("Capture Audio", systemImage: "plus")
         }
     }
     
@@ -239,7 +246,8 @@ struct DeviceListView: View {
     private func updateAudioDevices() async {
         await withTaskGroup(of: Void.self) { group in
             devices.filter({ $0.captureMusic == true }).forEach { device in
-                let postParam = WLEDStateChange(segment: [Segment(effectSpeed: Int64(myAudio.audioIntensity * 255), effectInt64ensity: Int64(myAudio.audioIntensity * 255))])
+                let postParam = WLEDStateChange(segment: [Segment(colors: [[myAudio.audioIntensity, 0, 255-myAudio.audioIntensity], [0, myAudio.audioIntensity, 255-myAudio.audioIntensity], [myAudio.audioIntensity, 255-myAudio.audioIntensity, 0]], effectSpeed: myAudio.audioIntensity)]
+                )
                 print("Device Music Connect \(device.address ?? "?") toggled \(postParam)")
                 Task {
                     await device.requestManager.addRequest(WLEDChangeStateRequest(state: postParam, context: viewContext))

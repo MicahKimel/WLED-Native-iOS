@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 
 class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
-    @Published var audioIntensity: Float = 0.0
+    @Published var audioIntensity: Int64 = 0
     private var audioRecorder: AVAudioRecorder?
     private var timer: Timer?
     
@@ -54,7 +54,8 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
             if let power = self?.audioRecorder?.averagePower(forChannel: 0) {
                 // Assuming typical range of -160 to 0 decibels
                 let normalizedIntensity = max(0, min(1, (power + 160) / 160))
-                self?.audioIntensity = normalizedIntensity
+                let audioIntensity = self?.expandNumber(number: normalizedIntensity) ?? 0
+                self?.audioIntensity = audioIntensity
             }
         }
     }
@@ -62,7 +63,25 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
     func stopMeasuring() {
         audioRecorder?.stop()
         timer?.invalidate()
-        audioIntensity = 0.0
+        self.audioIntensity = 0
+    }
+    
+    func expandNumber(number: Float) -> Int64 {
+        
+        print(number)
+        if number < 0.7 {
+            return 0
+        }
+        let minInput: Float = 0.7
+        let maxInput: Float = 1.0
+        let minOutput: Float = 1.0
+        let maxOutput: Float = 255.0
+
+        let normalizedInput = (number - minInput) / (maxInput - minInput)
+        let expandedValue = normalizedInput * (maxOutput - minOutput) + minOutput
+        
+        print(Int64(expandedValue))
+        return Int64(expandedValue)
     }
     
     deinit {
