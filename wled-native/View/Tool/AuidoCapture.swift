@@ -22,6 +22,10 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(.record, mode: .default)
+            try audioSession.setCategory(
+                .playAndRecord, // Use .record if you don't need playback
+                options: [.mixWithOthers, .defaultToSpeaker]
+            )
             try audioSession.setActive(true)
             
             let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -55,6 +59,7 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
                 // Assuming typical range of -160 to 0 decibels
                 let normalizedIntensity = max(0, min(1, (power + 160) / 160))
                 let audioIntensity = self?.expandNumber(number: normalizedIntensity) ?? 0
+                print(audioIntensity)
                 self?.audioIntensity = audioIntensity
             }
         }
