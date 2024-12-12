@@ -38,6 +38,8 @@ struct DeviceListView: View {
     
     @State private var startAudioCaptureButtonActive: Bool = false
     
+    @State private var AudioCaptureSheet: Bool = false
+    
     @StateObject private var myAudio = AudioIntensityManager()
     
     @SceneStorage("DeviceListView.showHiddenDevices") private var showHiddenDevices: Bool = false
@@ -150,11 +152,12 @@ struct DeviceListView: View {
     
     var captureAudioButton: some View {
         Button {
+            AudioCaptureSheet.toggle()
             if startAudioCaptureButtonActive {
                 myAudio.stopMeasuring()
             } else {
                 myAudio.startMeasuring()
-                timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(myAudio.updateTime), repeats: true) { _ in
                     if startAudioCaptureButtonActive {
                         Task{
                             await updateAudioDevices()
@@ -165,6 +168,28 @@ struct DeviceListView: View {
             startAudioCaptureButtonActive.toggle()
         } label: {
             Label("Capture Audio", systemImage: "plus")
+        }
+        .sheet(isPresented: $AudioCaptureSheet){
+            VStack{
+                Text("Music Settings")
+                Toggle("Toggle Audio Capture On / Off", isOn: $startAudioCaptureButtonActive)
+                    .onChange(of: startAudioCaptureButtonActive){ item in
+                        if startAudioCaptureButtonActive {
+                            myAudio.stopMeasuring()
+                        } else {
+                            myAudio.startMeasuring()
+                            timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(myAudio.updateTime), repeats: true) { _ in
+                                if startAudioCaptureButtonActive {
+                                    Task{
+                                        await updateAudioDevices()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                MusicSettingsView(startAudioCaptureButtonActive: $startAudioCaptureButtonActive)
+                    .environmentObject(myAudio)
+            }
         }
     }
     
@@ -246,8 +271,18 @@ struct DeviceListView: View {
     private func updateAudioDevices() async {
         await withTaskGroup(of: Void.self) { group in
             devices.filter({ $0.captureMusic == true }).forEach { device in
-                let postParam = WLEDStateChange(segment: [Segment(colors: [[myAudio.audioIntensity, 0, 255-myAudio.audioIntensity], [0, myAudio.audioIntensity, 255-myAudio.audioIntensity], [myAudio.audioIntensity, 255-myAudio.audioIntensity, 0]], effectSpeed: myAudio.audioIntensity)]
-                )
+                var postParam = WLEDStateChange()
+                if myAudio.ColorCount == 3 {
+                    postParam = WLEDStateChange(segment: [Segment(colors: [myAudio.rgbValuesNow1, myAudio.rgbValuesNow2, myAudio.rgbValuesNow3], effectSpeed: myAudio.audioIntensity)]
+                    )
+                } else if myAudio.ColorCount == 2 {
+                    postParam = WLEDStateChange(segment: [Segment(colors: [myAudio.rgbValuesNow1, myAudio.rgbValuesNow2], effectSpeed: myAudio.audioIntensity)]
+                    )
+                } else if myAudio.ColorCount == 1 {
+                    postParam = WLEDStateChange(segment: [Segment(colors: [myAudio.rgbValuesNow1], effectSpeed: myAudio.audioIntensity)])
+                } else {
+                    postParam = WLEDStateChange(segment: [Segment(effectSpeed: myAudio.audioIntensity)])
+                }
                 print("Device Music Connect \(device.address ?? "?") toggled \(postParam)")
                 Task {
                     await device.requestManager.addRequest(WLEDChangeStateRequest(state: postParam, context: viewContext))

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		666450BC2D03842600ED89F1 /* AuidoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666450BB2D03842600ED89F1 /* AuidoCapture.swift */; };
+		666450BE2D0754B900ED89F1 /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666450BD2D0754B900ED89F1 /* MusicSettingsView.swift */; };
 		C90656202BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C906561F2BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy */; };
 		C93470AC29D904C20085D9D5 /* errorPage.en.html in Resources */ = {isa = PBXBuildFile; fileRef = C93470AB29D904C20085D9D5 /* errorPage.en.html */; };
 		C93470AE29D905BD0085D9D5 /* 012_rip.png in Resources */ = {isa = PBXBuildFile; fileRef = C93470AD29D905BD0085D9D5 /* 012_rip.png */; };
@@ -71,6 +72,7 @@
 
 /* Begin PBXFileReference section */
 		666450BB2D03842600ED89F1 /* AuidoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuidoCapture.swift; sourceTree = "<group>"; };
+		666450BD2D0754B900ED89F1 /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
 		C906561F2BBA5B9500D4ADAF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C93470AB29D904C20085D9D5 /* errorPage.en.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = errorPage.en.html; sourceTree = "<group>"; };
 		C93470AD29D905BD0085D9D5 /* 012_rip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 012_rip.png; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				C9767DE12AFAE64A002F3EA9 /* Tool */,
 				C9865AF52AEF1902000B2714 /* DeviceListView.swift */,
+				666450BD2D0754B900ED89F1 /* MusicSettingsView.swift */,
 				C96440E72AF095B500C51204 /* DeviceListItemView.swift */,
 				C99BEF562AF8B926001AD80A /* DeviceView.swift */,
 				C99BEF582AF8BA79001AD80A /* WebView.swift */,
@@ -410,6 +413,7 @@
 				C97CD49F2B269F6800420E93 /* Author.swift in Sources */,
 				C948F4952B3D1C480092C4B1 /* DeviceUpdateDetails.swift in Sources */,
 				C946FB832B68C3B700D5B00D /* WLEDRequestManager.swift in Sources */,
+				666450BE2D0754B900ED89F1 /* MusicSettingsView.swift in Sources */,
 				C948F49A2B3E2B590092C4B1 /* DeviceUpdateInstalling.swift in Sources */,
 				C9FCC38B293DB8A000DEDDEA /* WLEDRequestState.swift in Sources */,
 				C96440E22AEF6B6000C51204 /* Persistence.swift in Sources */,

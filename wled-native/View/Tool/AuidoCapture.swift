@@ -10,8 +10,30 @@ import AVFoundation
 
 class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
     @Published var audioIntensity: Int64 = 0
+    
+    @Published var minIntensity: Float = 0.7
+    @Published var isScreenAudio: Bool = true
+    @Published var updateTime: Float = 0.25
     private var audioRecorder: AVAudioRecorder?
     private var timer: Timer?
+    
+    // How many Colors to Send
+    @Published var ColorCount: Int = 1
+    
+    // Default First Color Red
+    @Published var rgbValuesNow1: [Int64] = [255, 0, 0]
+    @Published var rgbValuesLow1: [Int64] = [255, 0, 0]
+    @Published var rgbValuesHigh1: [Int64] = [255, 0, 0]
+    
+    // Default Second Color Green
+    @Published var rgbValuesNow2: [Int64] = [255, 0, 0]
+    @Published var rgbValuesLow2: [Int64] = [0, 255, 0]
+    @Published var rgbValuesHigh2: [Int64] = [0, 255, 0]
+    
+    // Default Third Color Blue
+    @Published var rgbValuesNow3: [Int64] = [255, 0, 0]
+    @Published var rgbValuesLow3: [Int64] = [0, 0, 255]
+    @Published var rgbValuesHigh3: [Int64] = [0, 0, 255]
     
     override init() {
         super.init()
@@ -22,10 +44,18 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(.record, mode: .default)
-            try audioSession.setCategory(
-                .playAndRecord, // Use .record if you don't need playback
-                options: [.mixWithOthers, .defaultToSpeaker]
-            )
+            if isScreenAudio {
+                try audioSession.setCategory(
+                    .playAndRecord, // Use .record if you don't need playback
+                    options: [.mixWithOthers, .defaultToSpeaker] // Screen input
+                )
+            } else {
+                // Mic audio
+                try audioSession.setCategory(
+                    .playAndRecord, // Use .record if you don't need playback
+                    mode: .default // Mic Input
+                )
+            }
             try audioSession.setActive(true)
             
             let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -74,10 +104,10 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
     func expandNumber(number: Float) -> Int64 {
         
         print(number)
-        if number < 0.7 {
+        if number < self.minIntensity {
             return 0
         }
-        let minInput: Float = 0.7
+        let minInput: Float = self.minIntensity
         let maxInput: Float = 1.0
         let minOutput: Float = 1.0
         let maxOutput: Float = 255.0
@@ -85,8 +115,22 @@ class AudioIntensityManager: NSObject, ObservableObject, AVAudioRecorderDelegate
         let normalizedInput = (number - minInput) / (maxInput - minInput)
         let expandedValue = normalizedInput * (maxOutput - minOutput) + minOutput
         
+        // To Debug
         print(Int64(expandedValue))
+        // Set Now Colors
+        self.rgbValuesNow1 = interpolateColor(fromColor: rgbValuesLow1, toColor: rgbValuesHigh1, factor: CGFloat(expandedValue))
+        self.rgbValuesNow2 = interpolateColor(fromColor: rgbValuesLow2, toColor: rgbValuesHigh2, factor: CGFloat(expandedValue))
+        self.rgbValuesNow3 = interpolateColor(fromColor: rgbValuesLow3, toColor: rgbValuesHigh3, factor: CGFloat(expandedValue))
+        
         return Int64(expandedValue)
+    }
+    
+    func interpolateColor(fromColor: [Int64], toColor: [Int64], factor: CGFloat) -> [Int64] {
+        let r = CGFloat(fromColor[0]) + CGFloat(toColor[0] - fromColor[0]) * factor
+        let g = CGFloat(fromColor[1]) + CGFloat(toColor[1] - fromColor[1]) * factor
+        let b = CGFloat(fromColor[2]) + CGFloat(toColor[2] - fromColor[2]) * factor
+
+        return [Int64(r/255), Int64(g/255), Int64(b/255)]
     }
     
     deinit {
